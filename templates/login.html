@@ -1,0 +1,225 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>BHL Login/Register</title>  
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">   -->
+ <style>  
+        body {  
+    font-family: Arial, sans-serif;  
+    background-color: #f9f9f9;  /* Lighter background for a clean look */  
+    margin: 0;  
+    padding: 0;  
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    height: 100vh;  
+    color: #333;  /* Darker text for better readability */  
+}  
+header {  
+    background-color: #c0392b;  
+    color: #fff;  
+    padding: 10px 0;  
+    text-align: center;  
+    width: 100%;  
+    position: fixed;  
+    top: 0;  
+    left: 0;  
+    z-index: 1000;  
+}
+body {
+    padding-top: 60px; /* Adjust based on header height to prevent overlap */
+}
+
+#container {  
+    transition: transform 0.5s ease-in-out;
+    width: 300px;  
+    padding: 20px;  
+    background-color: #fff;  
+    border-radius: 10px;  
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);  
+    text-align: center;  
+}  
+h1 {  
+    margin-top: 0;  
+    color: #fff;  /* Dark red color for headings */  
+    text-align: center;
+} 
+h2 {  
+    margin-top: 0;  
+    color: #b71c1c;  /* Dark red color for headings */  
+}  
+
+input {  
+    width: 100%;  
+    padding: 10px;  
+    margin: 10px 0;  
+    border: 1px solid #ccc;  
+    border-radius: 5px;  
+}  
+
+button {  
+    padding: 10px 20px;  
+    background-color: #d32f2f;  /* Blood red color for buttons */  
+    color: white;  
+    border: none;  
+    border-radius: 5px;
+    margin-top: auto;  
+    cursor: pointer;  
+    transition: background-color 0.3s;  /* Smooth transition for hover effect */  
+}  
+
+button:hover {  
+    background-color: #c62828;  /* Slightly darker red on hover */  
+}  
+
+p {  
+    margin: 10px 0;  
+    color: #0f0e0e;  /* Softer color for paragraph text */  
+}  
+
+a {  
+    color: #b71c1c;  /* Dark red for links */  
+    text-decoration: none;  /* No underline for links */  
+}  
+
+a:hover {  
+    text-decoration: underline;  /* Underline on hover for emphasis */  
+}
+    </style>  
+</head>  
+<body>  
+    <header> 
+        
+        <h1>Welcome to the BHL</h1>  
+        <h3>Helping Hand in Emergency- Blood Helpline</h3>  
+    </header>  
+    
+    <div id="container">  
+
+        <div id="register-form" style="display: none;">  
+            <h2>Register</h2>  
+            <input type="text" id="register-username" placeholder="Username"><br>  
+            <input type="email" id="register-email" placeholder="Email"><br>  
+            <input type="text" id="register-mobile" placeholder="Mobile"><br>  
+            <input type="password" id="register-password" placeholder="Password"><br>  
+            <input type="text" id="register-blood_group" placeholder="Blood Group"><br>  
+            <input type="number" id="register-age" placeholder="Age" min="0" max="120"><br>  
+            <input type="text" id="register-address" placeholder="Address"><br>  
+
+            <input type="text" id="register-city" placeholder="City"><br>  
+            <input type="text" id="register-state" placeholder="State"><br>  
+            <button id="register-btn" onclick="register()">Register</button> 
+ 
+            <p>Already have an account? <a onclick="showLogin()">Login now</a></p>  
+        </div>  
+        <div id="login-form">  
+            <h2>Login</h2>  
+            <input type="email" id="login-email" placeholder="Email" required><br>  
+            <input type="password" id="login-password" placeholder="Password" required><br>  
+            <button onclick="login()">Login</button>  
+            <p>New User? <a onclick="showRegister()">Register now</a></p> 
+ 
+        </div>  
+        
+    </div>  
+
+    <script>
+        function showRegister() {  
+                document.getElementById('login-form').style.display = 'none';  
+                document.getElementById('register-form').style.display = 'block';  
+            }
+    
+            // Function to show login form  
+            function showLogin() {  
+                document.getElementById('register-form').style.display = 'none';  
+                document.getElementById('login-form').style.display = 'block';  
+            }
+        
+    
+            // Function to show registration form  
+            
+    
+            // Function to handle user registration  
+            async function register() {  
+               
+    
+                
+    
+                const username = document.getElementById('register-username').value.trim();  
+                const email = document.getElementById('register-email').value.trim();  
+                const mobile = document.getElementById('register-mobile').value.trim();  
+                const password = document.getElementById('register-password').value.trim();  
+                const blood_group = document.getElementById('register-blood_group').value.trim();  
+                const age = parseInt(document.getElementById('register-age').value, 10); 
+                const address = document.getElementById('register-address').value.trim();  
+
+                const city = document.getElementById('register-city').value.trim();  
+                const state = document.getElementById('register-state').value.trim();
+    
+                // Basic validation  
+                if (!username || !email || !mobile || !password || !blood_group || isNaN(age) || age < 0 || age > 120 || !address || !city || !state) {  
+                    alert("Please fill out all fields properly.");
+                    // Ensure spinner is hidden and button is re-enabled if validation fails
+                    if (registerBtn) {
+                        registerBtn.disabled = false;
+                        loadingSpinner.style.display = 'none';
+                    }
+                    return;  
+                }
+    
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/register', {  
+                        method: 'POST',  
+                        headers: {  
+                            'Content-Type': 'application/json'  
+                        },  
+                        body: JSON.stringify({ username, email, mobile, password, blood_group, age,address, city, state })  
+                    });
+    
+                    const result = await response.json();  
+                    if (response.ok) {  
+                        alert(result.message);  
+                        showLogin(); // Switch to login form after successful registration  
+                    } else {  
+                        alert(result.error || 'Registration failed');  
+                    }
+                } catch (error) {
+                    console.error('Error during registration:', error);
+                    alert('An error occurred during registration.');
+                }
+            }
+    
+            // Function to handle user login  
+            async function login() {  
+                const email = document.getElementById('login-email').value;  
+                const password = document.getElementById('login-password').value;  
+    
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/login', {  
+                        method: 'POST',  
+                        headers: {  
+                            'Content-Type': 'application/json'  
+                        },  
+                        body: JSON.stringify({ email, password })  
+                    });
+    
+                    const result = await response.json();  
+                    if (response.ok) {  
+                        // If login is successful, save the user ID and redirect  
+                        sessionStorage.setItem('user_id', result.user_id);  
+                        window.location.href = '/index'; // Redirect to your main page  
+                    } else {  
+                        alert(result.error || 'Login failed');  
+                    }
+                } catch (error) {
+                    console.error('Error during login:', error);
+                    alert('An error occurred during login.');
+                }
+            }
+        
+    </script>
+    
+</body>  
+</html>
