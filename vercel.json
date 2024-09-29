@@ -7,7 +7,7 @@
             "config":{"runtime":"python3.10"}
         }
     ],
-    "routes": [
+    "rewrites": [
         {
             "src":"/(.*)",
             "dest":"/"
