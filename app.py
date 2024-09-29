@@ -1,4 +1,5 @@
 import os  
+import pymysql
 from flask import Flask, jsonify, redirect, request, session, url_for, render_template  
 from flask_bcrypt import Bcrypt  
 from flask_cors import CORS  
@@ -22,6 +23,8 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 app.config['UPLOAD_FOLDER'] = 'static/uploads/'  # Folder where images will be saved  
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Limit upload to 16 MB  
 
+
+#pymysql.install_as_MySQLdb() 
 mysql = MySQL(app)
 
 
