@@ -3,13 +3,13 @@ from flask import Flask, jsonify, redirect, request, session, url_for, render_te
 from flask_bcrypt import Bcrypt  
 from flask_cors import CORS  
 from flask_mysqldb import MySQL  
-from datetime import datetime  
 from bcrypt import hashpw, gensalt, checkpw  
 
 
 app = Flask(__name__)
+
 app.secret_key = 'your_secret_key'
-CORS(app)
+
 bcrypt = Bcrypt(app)
 
 # MySQL configurations
